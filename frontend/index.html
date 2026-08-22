@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Hazard AI-GIS Platform</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet GIS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">🌊 Ocean Hazard AI-GIS</div>
+        <ul class="nav-links">
+            <li><a href="#report-section" class="active" onclick="showSection('report-section')">Report Hazard</a></li>
+            <li><a href="#map-section" onclick="showSection('map-section')">Hazard Map</a></li>
+            <li><a href="#analytics-section" onclick="showSection('analytics-section')">Social Analytics</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container">
+
+        <!-- 1. REPORT HAZARD SECTION -->
+        <section id="report-section" class="content-section active-section">
+            <div class="header-text">
+                <h2>Submit a Coastal Hazard Report</h2>
+                <p>Our NLP engine will automatically classify the hazard and assess severity.</p>
+            </div>
+
+            <div class="grid-layout">
+                <!-- Submission Form -->
+                <div class="card form-card">
+                    <form id="hazardForm">
+                        <div class="form-group">
+                            <label for="description">Incident Description</label>
+                            <textarea id="description" rows="4" placeholder="Describe the hazard (e.g., 'Large oil slick spotted near the harbor...')" required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="latitude">Latitude</label>
+                                <input type="number" id="latitude" step="0.0001" placeholder="18.5204" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="longitude">Longitude</label>
+                                <input type="number" id="longitude" step="0.0001" placeholder="73.8567" required>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                            <button type="button" id="getLocationBtn" style="background-color: #007bff; color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                📍 Use My Current Location
+                            </button>
+                            <span id="locationMessage" style="font-size: 13px; font-weight: 600;"></span>
+                        </div>
+
+                        <!-- 🌤️ NEW FEATURE: LIVE WEATHER DATA DISPLAY -->
+                        <div id="weatherInfo" style="margin-bottom: 20px; font-size: 14px; color: #118AB2; font-weight: 700; display: none;">
+                            🌤️ Live Weather at location: <span id="weatherText">-</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submitBtn">Submit Report & Run AI</button>
+                    </form>
+                </div>
+
+                <!-- AI Prediction Result Card -->
+                <div class="card result-card" id="predictionResult" style="display: none;">
+                    <h3>🤖 AI Prediction Results</h3>
+                    <div class="result-item">
+                        <span>Predicted Category:</span>
+                        <strong id="res-category" class="highlight-text">-</strong>
+                    </div>
+                    <div class="result-item">
+                        <span>AI Confidence:</span>
+                        <strong id="res-confidence">-</strong>
+                    </div>
+                    <div class="result-item">
+                        <span>Assessed Severity:</span>
+                        <strong id="res-severity" class="badge">-</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. HAZARD MAP SECTION -->
+        <section id="map-section" class="content-section" style="display: none;">
+            <div class="header-text">
+                <h2>Live GIS Hazard Map</h2>
+                <p>Real-time spatial distribution of crowdsourced and predicted ocean hazards.</p>
+                <!-- 🔥 NEW FEATURE: TOGGLE HEATMAP BUTTON -->
+                <button id="toggleHeatmapBtn" class="btn-primary" style="width: auto; margin-top: 10px; background-color: #EF476F; display: inline-block;">🔥 Toggle Heatmap</button>
+            </div>
+            
+            <div class="card map-card">
+                <!-- Leaflet Map mounts here -->
+                <div id="hazardMap"></div>
+            </div>
+        </section>
+
+        <!-- 3. ANALYTICS DASHBOARD SECTION -->
+        <section id="analytics-section" class="content-section" style="display: none;">
+            <div class="header-text">
+                <h2>Analytics & Trends</h2>
+                <p>Aggregated statistics from PostgreSQL based on AI classifications.</p>
+                <!-- 📊 NEW FEATURE: EXPORT CSV BUTTON -->
+                <button id="exportCsvBtn" class="btn-primary" style="width: auto; margin-top: 10px; background-color: #06D6A0; color: #0A2540; display: inline-block;">📥 Download Data (CSV)</button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Total Reports</h3>
+                    <p id="totalReports">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>High Risk Incidents</h3>
+                    <p id="highRiskReports">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>System Status</h3>
+                    <p class="status-ok">Active</p>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid-layout charts-grid">
+                <div class="card chart-card">
+                    <h3>Hazard Distribution (AI Classified)</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="card chart-card">
+                    <h3>Severity Breakdown</h3>
+                    <canvas id="severityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Heatmap Plugin -->
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
