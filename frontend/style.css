@@ -1,0 +1,264 @@
+/* --- CSS VARIABLES (THEME) --- */
+:root {
+    --primary-color: #0A2540; /* Deep Ocean Blue */
+    --secondary-color: #118AB2; /* Bright Sea Blue */
+    --accent-color: #EF476F; /* Alert Red */
+    --bg-light: #F8F9FA;
+    --text-main: #333333;
+    --text-muted: #6C757D;
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;
+    --shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* --- GLOBAL STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+}
+
+/* --- NAVIGATION BAR --- */
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+}
+
+.navbar .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links li a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: var(--white);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.3rem;
+}
+
+/* --- LAYOUT CONTAINERS --- */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.header-text {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.header-text h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.header-text p {
+    color: var(--text-muted);
+}
+
+/* --- CARDS & FORMS --- */
+.card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.4rem;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0d6efd;
+}
+
+/* --- RESULT CARD & ANIMATIONS --- */
+.result-card h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.highlight-text {
+    color: var(--secondary-color);
+}
+
+.badge {
+    background-color: var(--accent-color);
+    color: var(--white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#predictionResult {
+    animation: slideUpFade 0.5s ease-out forwards;
+}
+
+/* --- GPS LOCATION BUTTON EFFECTS --- */
+#getLocationBtn {
+    transition: all 0.3s ease;
+}
+
+#getLocationBtn:hover {
+    background-color: var(--primary-color) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
+}
+
+/* --- MAP SECTION --- */
+.map-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+#hazardMap {
+    height: 500px;
+    width: 100%;
+    z-index: 1;
+    cursor: crosshair !important; /* Makes it clear the map is clickable */
+}
+
+/* --- ANALYTICS DASHBOARD --- */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--secondary-color);
+}
+
+.summary-card h3 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.summary-card p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.status-ok {
+    color: #06D6A0 !important; /* Green */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid-layout, .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-links {
+        display: none; /* In a full app, you'd add a hamburger menu here */
+    }
+}
